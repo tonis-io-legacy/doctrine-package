@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Spiffy\\DoctrinePackage\\": [
+            "Tonis\\DoctrinePackage\\": [
                 "src/",
                 "test/"
             ]
