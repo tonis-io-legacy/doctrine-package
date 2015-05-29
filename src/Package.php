@@ -1,14 +1,14 @@
 <?php
 
-namespace Spiffy\DoctrinePackage;
+namespace Tonis\DoctrinePackage;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Spiffy\Framework\AbstractPackage;
-use Spiffy\Framework\Application;
+use Tonis\Mvc\Package\AbstractPackage;
+use Tonis\Mvc\Tonis;
 
 class Package extends AbstractPackage
 {
-    public function bootstrap(Application $app)
+    public function bootstrap(Tonis $tonis)
     {
         AnnotationRegistry::registerLoader(
             function ($className) {

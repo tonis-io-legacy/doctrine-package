@@ -1,14 +1,16 @@
 <?php
 
-namespace Spiffy\DoctrinePackage;
+namespace Tonis\DoctrinePackage;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
-use Spiffy\Inject\Injector;
-use Spiffy\Inject\ServiceFactory;
+use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
+use Tonis\Di\Container;
+use Tonis\Di\ServiceFactoryInterface;
 
-final class DriverFactory implements ServiceFactory
+final class DriverFactory implements ServiceFactoryInterface
 {
     /**
      * @var array
@@ -24,31 +26,31 @@ final class DriverFactory implements ServiceFactory
     }
 
     /**
-     * @param Injector $i
+     * @param Container $di
      * @throws \RuntimeException
      * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      */
-    public function createService(Injector $i)
+    public function createService(Container $di)
     {
         $spec = $this->spec;
 
         if (is_string($spec)) {
-            return $i->nvoke($spec['service']);
+            return $di->get($spec['service']);
         }
 
         if (!isset($spec['class'])) {
             throw new \RuntimeException('Every driver configuration must specify a class');
         }
 
-        $type = isset($spec['type']) ? $spec['type'] : null;
+        $parents = class_parents($spec['class']);
 
-        switch ($type) {
-            case 'file':
-                return $this->createFileDriver($spec);
-            case 'annotation':
-                return $this->createAnnotationDriver($spec);
+        if (isset($parents[AnnotationDriver::class])) {
+            return $this->createAnnotationDriver($spec);
+        } elseif (isset($parents[FileDriver::class])) {
+            return $this->createFileDriver($spec);
         }
-        throw new \RuntimeException('Missing or invalid type: expected "annotation" or "file"');
+
+        throw new \RuntimeException(sprintf('Could not determine type from class: "%s"', $spec['class']));
     }
 
     /**
