@@ -7,7 +7,7 @@ use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
-use Tonis\Di\Container;
+use Interop\Container\ContainerInterface;
 use Tonis\Di\ServiceFactoryInterface;
 
 final class DriverFactory implements ServiceFactoryInterface
@@ -26,11 +26,11 @@ final class DriverFactory implements ServiceFactoryInterface
     }
 
     /**
-     * @param Container $di
+     * @param ContainerInterface $di
      * @throws \RuntimeException
      * @return \Doctrine\Common\Persistence\Mapping\Driver\MappingDriver
      */
-    public function createService(Container $di)
+    public function createService(ContainerInterface $di)
     {
         $spec = $this->spec;
 
