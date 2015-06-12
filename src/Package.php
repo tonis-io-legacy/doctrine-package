@@ -3,12 +3,12 @@
 namespace Tonis\DoctrinePackage;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Tonis\Mvc\Package\AbstractPackage;
-use Tonis\Mvc\Tonis;
+use Tonis\Web\Package\AbstractPackage;
+use Tonis\Web\App;
 
 class Package extends AbstractPackage
 {
-    public function bootstrap(Tonis $tonis)
+    public function bootstrap(App $tonis)
     {
         AnnotationRegistry::registerLoader(
             function ($className) {
